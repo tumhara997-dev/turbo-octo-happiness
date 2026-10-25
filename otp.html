@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Liên kết chứng minh — Bản mô phỏng</title>
+<style>
+:root{--navy:#091d78;--blue:#075fe5;--blue2:#0878f5;--muted:#64748b;--green:#13b86a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;width:100%;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--navy);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:#edf7ff}
+.page{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:600px;min-height:100vh;min-height:100svh;margin:0 auto;padding:26px 25px 30px;padding-bottom:calc(30px + env(safe-area-inset-bottom, 0px));background:linear-gradient(155deg,#f7fbff 0%,#eaf5ff 55%,#f8fcff 100%)}
+.top-wave{position:absolute;z-index:-1;left:-95px;top:-125px;width:320px;height:260px;background:linear-gradient(130deg,#c8e5ff,#e9f5ff);border-radius:0 0 100% 0;transform:rotate(-4deg)}
+.back{position:absolute;top:27px;left:27px;border:0;background:none;color:#071b71;font-size:39px;font-weight:300;line-height:1;padding:0;cursor:pointer}
+.brand-placeholder{height:52px; width:100%; display:flex; justify-content:flex-end; align-items:center; margin:0 0 28px; color:#1d3c9d; overflow:hidden}
+.brand-logo{display:block; width:112px; height:42px; max-width:112px; max-height:42px; object-fit:contain; object-position:right center; flex:0 0 auto;}
+#brand-fallback{align-items:center}
+.brand-mark{display:flex;align-items:center;justify-content:flex-end;gap:5px;font-weight:900;font-size:13px;letter-spacing:.2px;max-width:150px;white-space:nowrap;overflow:hidden}
+.brand-symbol{width:19px;height:19px;flex:0 0 19px;border:3px solid #1d3c9d;border-radius:5px;transform:rotate(45deg);display:inline-block;position:relative}
+.brand-symbol:after{content:"";position:absolute;left:5px;top:-3px;width:3px;height:19px;background:#1d3c9d;transform:rotate(-45deg)}
+h1{text-align:center;font-size:clamp(25px,6vw,35px);line-height:1.12;letter-spacing:-.6px;margin:0 0 9px;font-weight:850}
+.subtitle{text-align:center;color:#5f6f89;font-size:17px;margin:0}
+.linked{display:flex;align-items:center;justify-content:center;margin:28px auto 31px;gap:0}
+.seal{width:126px;height:126px;border:8px solid white;border-radius:50%;background:linear-gradient(145deg,#fff,#e8f4ff);box-shadow:0 3px 10px #315b8a24;display:grid;place-items:center;flex-shrink:0}
+.seal-inner{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;text-align:center;color:#0d399c;font-size:42px;overflow:hidden;padding:0}
+.seal.right .seal-inner{background:linear-gradient(145deg,#176bf1,#062e9f);color:white;border-radius:50%;font-size:34px}
+.node-logo{display:block;width:72px;height:72px;max-width:100%;max-height:100%;object-fit:contain;flex:0 0 auto;}
+.node-logo{display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;border-radius:50%;}
+@media(max-width:390px){.seal-inner{width:100%;height:100%}.node-logo{width:100%;height:100%}}
+.line{height:4px;flex:1;max-width:53px;background:linear-gradient(90deg,#14bd71,#b1ebd0)}
+.tick{height:47px;width:47px;border-radius:50%;background:#10b866;color:white;display:grid;place-items:center;font-size:30px;font-weight:800;flex-shrink:0}
+.panel{background:#ffffffd9;border-radius:29px;padding:25px 21px 29px;box-shadow:0 10px 26px #3769a00e}
+.panel-title{display:flex;align-items:center;justify-content:center;gap:17px;margin-bottom:9px}
+.lock-bubble{width:61px;height:61px;border-radius:50%;background:#e6f3ff;display:grid;place-items:center;flex-shrink:0}
+.lock-shield{width:30px;height:36px;background:#0b4cb7;clip-path:polygon(50% 0,95% 18%,89% 68%,50% 100%,11% 68%,5% 18%);display:grid;place-items:center;color:white;font-size:18px}
+h2{font-size:clamp(22px,5.2vw,30px);line-height:1.1;margin:0;font-weight:850;letter-spacing:-.5px}
+.instruction{text-align:center;color:#596b86;font-size:16px;line-height:1.45;margin:8px 0 25px}
+.pin-demo{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.pin-demo input{width:100%;height:83px;border:2px solid #c9d6e2;border-radius:13px;background:linear-gradient(#fff,#fdfefe);box-shadow:0 3px 6px #203f6416;text-align:center;font-size:24px;color:var(--navy);outline:none;min-width:0}
+.pin-demo input:focus{border-color:#4a8ae8;box-shadow:0 0 0 3px #3c82e51a}
+.security{margin-top:20px;padding:22px 27px;display:flex;align-items:center;gap:24px;background:#ffffffa6;border-radius:24px;min-height:120px}
+.shield{width:52px;height:62px;flex-shrink:0;color:#073baf}
+.security strong{display:block;font-size:16px;margin-bottom:6px}
+.security p{font-size:15px;line-height:1.45;color:#536783;margin:0}
+.art{position:relative;min-height:225px;margin:10px -25px 0;overflow:hidden}
+.wave-a{position:absolute;width:125%;height:185px;left:-12%;top:35px;background:#c5e4ff;border-radius:48% 58% 0 0 / 38% 50% 0 0;transform:rotate(9deg)}
+.wave-b{position:absolute;width:120%;height:130px;left:-15%;top:77px;background:#acd8ff;border-radius:50% 50% 0 0 / 35% 45% 0 0;transform:rotate(16deg);opacity:.75}
+.slogan{position:absolute;left:34px;top:101px;font-family:"Segoe Script","Brush Script MT",cursive;font-style:italic;font-size:27px;line-height:1.12;color:#103d9b;transform:rotate(-8deg)}
+.star{position:absolute;right:26px;top:33px;font-size:150px;line-height:1;color:#9ccafa;opacity:.7;font-weight:200}
+.action{position:relative;display:block;width:100%;margin-top:-3px;border:0;border-radius:50px;padding:19px 16px;background:linear-gradient(100deg,#123ba7,#0869ee);color:white;font-size:22px;font-weight:800;box-shadow:0 10px 22px #1553b62b;cursor:pointer}
+.notice{font-size:12px;line-height:1.4;text-align:center;color:#687b96;margin:14px 5px 0}
+@media(max-width:390px){.page{padding:22px 20px 26px}.linked{margin:24px auto}.seal{width:103px;height:103px;border-width:7px}.seal-inner{width:72px;height:72px;font-size:34px}.line{max-width:31px}.tick{width:39px;height:39px;font-size:25px}.pin-demo{gap:7px}.pin-demo input{height:65px}.security{padding:18px;gap:16px}.art{margin-left:-20px;margin-right:-20px}.star{right:15px;font-size:125px}.slogan{left:25px;font-size:23px}}
+.brand-placeholder img.brand-logo{width:90px !important;height:34px !important;max-width:90px !important;max-height:34px !important;object-fit:contain !important;display:block !important;}
+
+/* Android/mobile layout refinements */
+img{max-width:100%;}
+button,input{font:inherit;}
+@media (max-width:480px){
+  .page{padding-left:18px;padding-right:18px;}
+  .linked{width:100%;gap:0;margin:22px auto 26px;}
+  .seal{width:clamp(82px,25vw,112px);height:clamp(82px,25vw,112px);border-width:6px;}
+  .seal-inner{width:100%;height:100%;overflow:hidden;border-radius:50%;}
+  .seal-inner img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;}
+  .line{max-width:36px;min-width:12px;}
+  .tick{width:36px;height:36px;flex:0 0 36px;font-size:23px;}
+  .panel{padding:20px 15px 22px;border-radius:23px;}
+  .panel-title{gap:11px;}
+  h2{font-size:clamp(19px,5vw,25px);}
+  .instruction{font-size:14px;margin-bottom:20px;}
+  .pin-demo{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;}
+  .pin-demo input{height:clamp(48px,15vw,66px);font-size:20px;border-radius:10px;}
+  .security{padding:16px;gap:14px;min-height:0;border-radius:18px;}
+  .security p{font-size:13px;}
+  .art{margin-left:-18px;margin-right:-18px;min-height:190px;}
+  .action{font-size:18px;padding:16px 14px;}
+}
+@media (max-width:350px){
+  .page{padding-left:14px;padding-right:14px;}
+  .linked{margin:18px auto 22px;}
+  .seal{width:76px;height:76px;border-width:5px;}
+  .line{max-width:24px;}
+  .tick{width:30px;height:30px;flex-basis:30px;font-size:20px;}
+  .pin-demo{gap:4px;}
+  .pin-demo input{height:44px;font-size:18px;}
+  .panel-title{gap:8px;}
+  .lock-bubble{width:48px;height:48px;}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="top-wave" aria-hidden="true"></div>
+  <button class="back" type="button" aria-label="Quay lại" onclick="history.back()">‹</button>
+  <div class="brand-placeholder" aria-label="Thương hiệu của bạn">
+    <!-- Add your own logo file at assets/logo.png, or change the src path. -->
+    <img class="brand-logo" src="assets/logo.png" alt="Logo thương hiệu của bạn"
+         onerror="this.style.display='none';document.getElementById('brand-fallback').style.display='flex';">
+    <div class="brand-mark" id="brand-fallback" style="display:none;">
+      <span class="brand-symbol" aria-hidden="true"></span><span>YOUR BRAND</span>
+    </div>
+  </div>
+
+  <h1>LIÊN KẾT CHỨNG MINH</h1>
+  <p class="subtitle">Kết nối an toàn · Trải nghiệm tiện lợi</p>
+
+  <div class="linked" aria-hidden="true">
+    <div class="seal"><div class="seal-inner"><img class="node-logo" src="assets/document-logo.png" alt=""></div></div>
+    <div class="line"></div><div class="tick">✓</div><div class="line"></div>
+    <div class="seal right"><div class="seal-inner"><img class="node-logo" src="assets/home-logo.png" alt=""></div></div>
+  </div>
+
+  <section class="panel">
+    <div class="panel-title">
+      <div class="lock-bubble"><div class="lock-shield">⌑</div></div>
+      <h2>XÁC THỰC LIÊN KẾT</h2>
+    </div>
+    <p class="instruction">Vui lòng nhập mã PIN Digital OTP để xác thực liên kết.</p>
+    <div class="pin-demo" aria-label="Trường ký tự minh họa">
+      <input aria-label="Ký tự minh họa 1" inputmode="numeric" maxlength="1" autocomplete="off">
+      <input aria-label="Ký tự minh họa 2" inputmode="numeric" maxlength="1" autocomplete="off">
+      <input aria-label="Ký tự minh họa 3" inputmode="numeric" maxlength="1" autocomplete="off">
+      <input aria-label="Ký tự minh họa 4" inputmode="numeric" maxlength="1" autocomplete="off">
+      <input aria-label="Ký tự minh họa 5" inputmode="numeric" maxlength="1" autocomplete="off">
+      <input aria-label="Ký tự minh họa 6" inputmode="numeric" maxlength="1" autocomplete="off">
+    </div>
+  </section>
+
+  <section class="security">
+    <svg class="shield" viewBox="0 0 64 72" fill="none" aria-hidden="true">
+      <path d="M32 4 56 13v18c0 17-10 28-24 36C18 59 8 48 8 31V13L32 4Z" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="m20 34 8 8 17-19" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>Bảo mật tuyệt đối</strong><p>Mã PIN Digital OTP được bảo vệ an toàn bởi MB Bank</p></div>
+  </section>
+
+  <div class="art" aria-hidden="true">
+    <div class="wave-a"></div><div class="wave-b"></div>
+    <div class="slogan">Cùng bạn<br>vươn xa</div><div class="star">☆</div>
+  </div>
+  <button class="action" id="demo-action" type="button">LIÊN KẾT →</button>
+  <p class="notice" id="status" role="status">Giao diện minh họa · Không kết nối với ngân hàng</p>
+</main>
+<script>
+  // Prototype only: the entered digits are never submitted or stored.
+  const boxes = [...document.querySelectorAll('.pin-demo input')];
+  boxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/\D/g, '').slice(0, 1);
+      if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+    });
+  });
+  document.getElementById('demo-action').addEventListener('click', () => {
+    const code = boxes.map(box => box.value).join('');
+    const status = document.getElementById('status');
+    if (!/^\d{6}$/.test(code)) {
+      status.textContent = 'Vui lòng nhập đủ 6 chữ số để tiếp tục mô phỏng.';
+      return;
+    }
+    status.textContent = '✓ Hoàn tất mô phỏng. Đang chuyển bước…';
+    status.style.color = '#087a45';
+    document.getElementById('demo-action').disabled = true;
+    document.getElementById('demo-action').textContent = 'VERIFIED ✓';
+    setTimeout(() => { window.location.href = 'verfied.html'; }, 900);
+  });
+</script>
+</body>
+</html>

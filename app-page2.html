@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Tải Tài Liệu – VietVisa Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --blue:#1a6ef5;--blue-dark:#1055cc;--blue-mid:#e8f0fe;
+      --green:#16a34a;--green-bg:#f0fdf4;--red:#ef4444;
+      --text:#0f172a;--sub:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#fff;
+      --shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.06);
+    }
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;display:flex;flex-direction:column;}
+    .status-bar{background:var(--blue-dark);padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;}
+    .sb-time{font-size:14px;font-weight:700;color:#fff;}
+    .sb-icons{display:flex;gap:6px;font-size:12px;color:#fff;}
+    .top-header{background:linear-gradient(160deg,var(--blue-dark),var(--blue));padding:14px 20px 22px;}
+    .th-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .th-btn{width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none;color:#fff;}
+    .th-title{font-size:15px;font-weight:700;color:#fff;}
+    .step-pills{display:flex;gap:6px;justify-content:center;}
+    .sp{height:4px;border-radius:4px;}
+    .sp.done{width:32px;background:rgba(255,255,255,0.5);}
+    .sp.active{width:32px;background:#fff;}
+    .sp.inactive{width:16px;background:rgba(255,255,255,0.3);}
+    .content{flex:1;padding:16px 16px 120px;overflow-y:auto;}
+    .step-counter{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .sc-label{font-size:13px;font-weight:700;}
+    .sc-steps{font-size:12px;font-weight:600;color:var(--sub);}
+    .progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:16px;}
+    .progress-fill{height:100%;width:66%;background:linear-gradient(90deg,var(--blue),#60a5fa);border-radius:4px;}
+    .notice{background:var(--blue-mid);border-radius:14px;padding:12px 14px;display:flex;gap:10px;margin-bottom:14px;font-size:12.5px;color:#1e40af;line-height:1.5;}
+    .notice .ni{font-size:18px;flex-shrink:0;}
+    .card{background:var(--white);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .card-title{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;}
+    .upload-item{margin-bottom:16px;}
+    .upload-item:last-child{margin-bottom:0;}
+    .ul-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+    .ul-req{color:var(--red);}
+    .ul-hint{font-size:11.5px;color:var(--sub);margin-bottom:8px;}
+    .upload-zone{border:2px dashed var(--border);border-radius:14px;background:#fafbfd;padding:22px 16px;text-align:center;cursor:pointer;position:relative;transition:border-color .2s,background .2s;}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:var(--blue);background:var(--blue-mid);}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .uz-circle{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;}
+    .uz-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+    .uz-sub{font-size:11px;color:var(--sub);}
+    .uz-btn{display:inline-block;margin-top:10px;padding:7px 18px;background:var(--blue);color:#fff;border-radius:20px;font-size:12px;font-weight:700;}
+    .file-chips{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+    .file-chip{display:flex;align-items:center;gap:10px;background:var(--green-bg);border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;}
+    .fc-icon{font-size:20px;flex-shrink:0;}
+    .fc-info{flex:1;min-width:0;}
+    .fc-name{font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .fc-size{font-size:11px;color:var(--sub);margin-top:1px;}
+    .fc-rm{background:none;border:none;font-size:16px;color:#94a3b8;cursor:pointer;padding:0;line-height:1;flex-shrink:0;}
+    .fc-rm:hover{color:var(--red);}
+    .tip-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:12.5px;line-height:1.5;}
+    .tip-row:last-child{margin-bottom:0;}
+    .tip-tick{width:20px;height:20px;background:var(--green-bg);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;margin-top:1px;}
+    .bottom-action{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);padding:12px 20px 28px;}
+    .btn-row{display:flex;gap:10px;}
+    .btn-back{padding:15px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--sub);cursor:pointer;flex-shrink:0;}
+    .btn-back:active{opacity:.8;}
+    .btn-main{flex:1;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(26,110,245,0.3);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s,transform .15s;}
+    .btn-main:active{opacity:.9;transform:scale(0.98);}
+    .btn-main:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+    .btn-sub{text-align:center;font-size:11px;color:var(--sub);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:4px;}
+    .spinner{width:17px;height:17px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Upload progress overlay */
+    .upload-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.7);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;}
+    .upload-overlay.hidden{display:none;}
+    .uo-card{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
+    .uo-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;}
+    .uo-sub{font-size:13px;color:var(--sub);margin-bottom:20px;}
+    .uo-bar-bg{height:8px;background:var(--border);border-radius:8px;overflow:hidden;}
+    .uo-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),#60a5fa);border-radius:8px;transition:width .4s;}
+    .uo-pct{font-size:13px;font-weight:700;color:var(--blue);margin-top:10px;}
+
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-10px);padding:12px 22px;border-radius:12px;font-size:13px;font-weight:700;color:#fff;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast.success{background:var(--green);}
+    .toast.error{background:var(--red);}
+    .toast.info{background:#334155;}
+
+    /* Success screen */
+    .success-screen{position:fixed;inset:0;background:var(--white);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;}
+    .success-screen.hidden{display:none;}
+    .ss-icon{width:80px;height:80px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 20px;}
+    .ss-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:10px;}
+    .ss-sub{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:24px;}
+    .ss-detail{background:var(--bg);border-radius:14px;padding:16px;width:100%;text-align:left;margin-bottom:24px;}
+    .ss-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;}
+    .ss-row:last-child{margin-bottom:0;}
+    .ss-row .key{color:var(--sub);font-weight:600;}
+    .ss-row .val{font-weight:700;color:var(--text);}
+    .ss-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+  </style>
+</head>
+<body>
+
+<div class="status-bar">
+  <span class="sb-time" id="clock">9:41</span>
+  <div class="sb-icons"><span>●●●●</span><span>WiFi</span><span>🔋</span></div>
+</div>
+
+<div class="top-header">
+  <div class="th-row">
+    <button class="th-btn" onclick="history.back()">←</button>
+    <span class="th-title">Tải Lên Tài Liệu</span>
+    <button class="th-btn">?</button>
+  </div>
+  <div class="step-pills">
+    <div class="sp done"></div>
+    <div class="sp active"></div>
+    <div class="sp inactive"></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="step-counter">
+    <span class="sc-label">Tải Lên Tài Liệu</span>
+    <span class="sc-steps">Bước 2 / 3</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+
+  <div class="notice">
+    <div class="ni">🔐</div>
+    <div>Tài liệu được mã hóa <strong>AES-256</strong>. Chỉ nhân viên được uỷ quyền mới có thể xem hồ sơ của bạn.</div>
+  </div>
+
+  <!-- CCCD + Passport -->
+  <div class="card">
+    <div class="card-title">Giấy Tờ Tùy Thân</div>
+
+    <div class="upload-item">
+      <div class="ul-label">🪪 CCCD Mặt Trước / Mặt Sau <span class="ul-req">*</span></div>
+      <div class="ul-hint">Chụp rõ nét cả 2 mặt – JPG, PNG – tối đa 10MB</div>
+      <div class="upload-zone" id="zone-cccd"
+           ondragover="drag(event,'zone-cccd')"
+           ondragleave="undrag('zone-cccd')"
+           ondrop="drop(event,'cccd')">
+        <input type="file" accept="image/*" multiple onchange="pick(event,'cccd')"/>
+        <div class="uz-circle">🪪</div>
+        <div class="uz-title">Nhấn để chọn ảnh CCCD</div>
+        <div class="uz-sub">Mặt trước & mặt sau • JPG, PNG</div>
+        <div class="uz-btn">📂 Chọn File</div>
+      </div>
+      <div class="file-chips" id="files-cccd"></div>
+    </div>
+
+    <div class="upload-item">
+      <div class="ul-label">🛂 Ảnh Hộ Chiếu <span class="ul-req">*</span></div>
+      <div class="ul-hint">Trang thông tin cá nhân – còn hạn ít nhất 6 tháng</div>
+      <div class="upload-zone" id="zone-passport"
+           ondragover="drag(event,'zone-passport')"
+           ondragleave="undrag('zone-passport')"
+           ondrop="drop(event,'passport')">
+        <input type="file" accept="image/*,.pdf" onchange="pick(event,'passport')"/>
+        <div class="uz-circle">🛂</div>
+        <div class="uz-title">Nhấn để chọn ảnh hộ chiếu</div>
+        <div class="uz-sub">JPG, PNG, PDF • Max 10MB</div>
+        <div class="uz-btn">📂 Chọn File</div>
+      </div>
+      <div class="file-chips" id="files-passport"></div>
+    </div>
+  </div>
+
+  <!-- Verification demo navigation (replaces the removed financial section) -->
+  <div class="card demo-continue-card">
+    <div class="card-title">Xác Thực Liên Kết</div>
+    <p style="font-size:13px;line-height:1.5;color:var(--sub);margin:0 0 14px;">
+     Chuyển sang bản thiết kế giao diện xác thực. Đúng vậy, mã OTP/PIN sẽ được gửi đến số điện thoại của bạn.
+    </p>
+    <button type="button" class="btn-main" style="width:100%;" onclick="window.location.href='otp.html'">
+      🔗 Tiếp Tục
+    </button>
+  </div>
+
+  <!-- Tips -->
+  <div class="card">
+    <div class="card-title">💡 Lưu Ý Khi Chụp Ảnh</div>
+    <div class="tip-row"><div class="tip-tick">✓</div><div>Chụp thẳng, đủ ánh sáng, không bị chói hoặc mờ</div></div>
+    <div class="tip-row"><div class="tip-tick">✓</div><div>Toàn bộ thông tin trên giấy tờ phải đọc được rõ ràng</div></div>
+    <div class="tip-row"><div class="tip-tick">✓</div><div>Không chỉnh sửa, cắt xén hoặc che khuất nội dung</div></div>
+    <div class="tip-row"><div class="tip-tick">✓</div><div>Mỗi file dưới 10MB – JPG / PNG / PDF</div></div>
+  </div>
+
+  <!-- Contact -->
+  <div class="card" style="display:flex;align-items:center;gap:14px;">
+    <div style="width:44px;height:44px;background:var(--blue-mid);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📞</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;">Cần hỗ trợ? Gọi ngay</div>
+      <div style="font-size:15px;font-weight:800;color:var(--blue);margin-top:2px;">0901 234 567</div>
+      <div style="font-size:11px;color:var(--sub);margin-top:1px;">T2–T7: 8:00–18:00 • Zalo 24/7</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom buttons -->
+<div class="bottom-action">
+  <div class="btn-row">
+    <button class="btn-back" onclick="history.back()">← Lại</button>
+    <button class="btn-main" id="btn-submit" onclick="submitAll()">
+      <span id="btn-label">📬 Nộp Hồ Sơ</span>
+    </button>
+  </div>
+  <div class="btn-sub">🔒 Bảo mật SSL 256-bit • Mã hóa AES-256</div>
+</div>
+
+<!-- Upload overlay -->
+<div class="upload-overlay hidden" id="overlay">
+  <div class="uo-card">
+    <div class="uo-title">📤 Đang Gửi Hồ Sơ</div>
+    <div class="uo-sub" id="uo-sub">Đang tải tài liệu lên...</div>
+    <div class="uo-bar-bg"><div class="uo-bar-fill" id="uo-bar"></div></div>
+    <div class="uo-pct" id="uo-pct">0%</div>
+  </div>
+</div>
+
+<!-- Success screen -->
+<div class="success-screen hidden" id="success-screen">
+  <div class="ss-icon">✅</div>
+  <div class="ss-title">Nộp Hồ Sơ Thành Công!</div>
+  <div class="ss-sub">Hồ sơ của bạn đã được tiếp nhận. Chúng tôi sẽ liên hệ trong vòng 24–48 giờ làm việc.</div>
+  <div class="ss-detail" id="ss-detail"></div>
+  <button class="ss-btn" onclick="window.location.href='app-page1.html'">🏠 Về Trang Chủ</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Clock
+  function tick(){
+    const n = new Date();
+    document.getElementById('clock').textContent =
+      n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0');
+  }
+  tick(); setInterval(tick,30000);
+
+  // File store
+  const store = {cccd:[], passport:[], finance:[]};
+
+  function drag(e,id){ e.preventDefault(); document.getElementById(id).classList.add('drag-over'); }
+  function undrag(id){ document.getElementById(id).classList.remove('drag-over'); }
+  function drop(e,key){ e.preventDefault(); undrag('zone-'+key); add(key, Array.from(e.dataTransfer.files)); }
+  function pick(e,key){ add(key, Array.from(e.target.files)); }
+
+  function add(key, files){
+    files.forEach(f => {
+      if(!store[key].find(x => x.name===f.name && x.size===f.size))
+        store[key].push(f);
+    });
+    render(key);
+  }
+
+  function rm(key,i){ store[key].splice(i,1); render(key); }
+
+  function fmt(b){ return b>1048576 ? (b/1048576).toFixed(1)+' MB' : (b/1024).toFixed(0)+' KB'; }
+
+  function render(key){
+    const c = document.getElementById('files-'+key);
+    c.innerHTML = '';
+    store[key].forEach((f,i) => {
+      const ext = f.name.split('.').pop().toLowerCase();
+      const icon = ext==='pdf' ? '📄' : '🖼️';
+      const d = document.createElement('div');
+      d.className = 'file-chip';
+      d.innerHTML = `
+        <div class="fc-icon">${icon}</div>
+        <div class="fc-info">
+          <div class="fc-name">${f.name}</div>
+          <div class="fc-size">${fmt(f.size)}</div>
+        </div>
+        <button class="fc-rm" onclick="rm('${key}',${i})">✕</button>`;
+      c.appendChild(d);
+    });
+  }
+
+  function showToast(msg, type='info'){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast '+type;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function setProgress(pct, label){
+    document.getElementById('uo-bar').style.width = pct+'%';
+    document.getElementById('uo-pct').textContent = pct+'%';
+    if(label) document.getElementById('uo-sub').textContent = label;
+  }
+
+  // Demo-only navigation: selected files stay in this browser and are not uploaded.
+  function submitAll(){
+    document.getElementById('success-screen').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
